@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const latest = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+<Layout
+  title="Rachel Donahue | Fort Worth Realtor"
+  description="Rachel Donahue is a Fort Worth, TX real estate agent with Texas Property Brokers, serving the 76109 and 76185 areas. Real Estate. Real Life."
+>
+  <section class="hero">
+    <img src="/images/house-4.jpg" alt="A Fort Worth-area home represented by Rachel Donahue" class="hero-img" />
+    <div class="hero-overlay"></div>
+    <div class="wrap hero-content">
+      <p class="eyebrow hero-eyebrow">Fort Worth Real Estate</p>
+      <h1 class="hero-title">Real Estate.<br />Real Life.</h1>
+      <p class="hero-sub">Straightforward guidance from a Realtor who treats your move like it's her own &mdash; buying, selling, or just figuring out what's next in Fort Worth.</p>
+      <div class="hero-ctas">
+        <a href="/valuation/" class="btn btn-gold">Get Your Home's Value</a>
+        <a href="/contact/" class="btn btn-outline-light">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-teaser">
+    <div class="wrap about-teaser-grid">
+      <img src="/images/rachel-headshot-sm.jpg" alt="Rachel Donahue" class="about-teaser-img" />
+      <div>
+        <p class="eyebrow">Meet Rachel</p>
+        <p class="lede about-quote">&ldquo;As a Realtor, clients have many different budgets &mdash; from first-time buyers to those in higher price ranges. It's my job to find you your dream home, no matter the price point, and get you the best deal possible.&rdquo;</p>
+        <a href="/about/" class="btn btn-outline-dark">Rachel's Story</a>
+      </div>
+    </div>
+  </section>
+
+  {latest.length > 0 && (
+    <section class="blog-teaser">
+      <div class="wrap">
+        <p class="eyebrow">From the Blog</p>
+        <h2>Market Notes &amp; Neighborhood Guides</h2>
+        <div class="blog-teaser-grid">
+          {latest.map(post => (
+            <a href={`/blog/${post.id}/`} class="card blog-card">
+              {post.data.heroImage && <img src={post.data.heroImage} alt="" class="blog-card-img" />}
+              <div class="blog-card-body">
+                <span class="tag-label">{post.data.tags[0] ?? 'Market Update'}</span>
+                <h3 class="blog-card-title">{post.data.title}</h3>
+                <p class="blog-card-desc">{post.data.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+        <a href="/blog/" class="btn btn-outline-dark" style="margin-top: 2rem;">Read More on the Blog</a>
+      </div>
+    </section>
+  )}
+
+  <section class="valuation-cta">
+    <div class="wrap valuation-cta-inner">
+      <div>
+        <h2 class="valuation-cta-title">What's your home worth right now?</h2>
+        <p class="valuation-cta-sub">A free, no-pressure look at where your home stands in today's Fort Worth market.</p>
+      </div>
+      <a href="/valuation/" class="btn btn-outline-dark valuation-cta-btn">Get My Free Valuation</a>
+    </div>
+  </section>
+
+  <style>
+    .hero { position: relative; min-height: 88vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(31,41,51,0.35) 0%, rgba(31,41,51,0.55) 55%, rgba(31,41,51,0.92) 100%);
+    }
+    .hero-content { position: relative; color: var(--ivory); padding: 4rem 1.75rem 4.5rem; }
+    .hero-eyebrow { color: var(--taupe); }
+    .hero-title { color: var(--ivory); font-size: clamp(2.6rem, 7vw, 4.6rem); margin-bottom: 0.7rem; }
+    .hero-sub { color: rgba(248,246,242,0.88); font-size: 1.15rem; max-width: 46ch; margin-bottom: 2rem; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .about-teaser-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .about-teaser-img { border-radius: 10px; aspect-ratio: 3/4; object-fit: cover; }
+    .about-quote { font-style: italic; }
+
+    .blog-teaser { background: var(--white); }
+    .blog-teaser-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; margin-top: 2.5rem; }
+    .blog-card { text-decoration: none; color: var(--ink); display: flex; flex-direction: column; }
+    .blog-card-img { aspect-ratio: 4/3; object-fit: cover; }
+    .blog-card-body { padding: 1.4rem 1.4rem 1.6rem; }
+    .blog-card-title { font-size: 1.15rem; margin: 0.5rem 0 0.6rem; }
+    .blog-card-desc { font-size: 0.9rem; margin: 0; }
+
+    .valuation-cta { background: var(--gold); }
+    .valuation-cta-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+    }
+    .valuation-cta-title { color: var(--navy); margin-bottom: 0.4rem; }
+    .valuation-cta-sub { color: #5a4a2c; margin: 0; }
+    .valuation-cta-btn { flex-shrink: 0; }
+
+    @media (max-width: 820px) {
+      .about-teaser-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-teaser-img { max-width: 260px; }
+      .blog-teaser-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>

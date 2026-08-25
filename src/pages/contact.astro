@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Contact Rachel Donahue | Fort Worth Realtor"
+  description="Reach Rachel Donahue directly by phone, email, or the form below. Serving Fort Worth's 76109 and 76107 areas."
+>
+  <section class="contact-hero">
+    <div class="wrap contact-grid">
+      <div>
+        <p class="eyebrow">Get in Touch</p>
+        <h1>Let's talk it through.</h1>
+        <p class="lede">Whether you're ready to move or just want to ask a few questions, reach out directly &mdash; I answer these myself.</p>
+        <div class="contact-direct">
+          <a href="tel:8173121576" class="contact-direct-link">
+            <span class="tag-label">Call or Text</span>
+            817.312.1576
+          </a>
+          <a href="mailto:rachdonahue@gmail.com" class="contact-direct-link">
+            <span class="tag-label">Email</span>
+            rachdonahue@gmail.com
+          </a>
+        </div>
+      </div>
+      <form class="site-form card contact-form" id="contact-form">
+        <div>
+          <label for="c-name">Name</label>
+          <input type="text" id="c-name" name="name" required />
+        </div>
+        <div>
+          <label for="c-email">Email</label>
+          <input type="email" id="c-email" name="email" required />
+        </div>
+        <div>
+          <label for="c-phone">Phone</label>
+          <input type="tel" id="c-phone" name="phone" />
+        </div>
+        <div>
+          <label for="c-message">Message</label>
+          <textarea id="c-message" name="message" required placeholder="What can I help with?"></textarea>
+        </div>
+        <input type="hidden" name="formType" value="contact" />
+        <button type="submit" class="btn btn-gold">Send Message</button>
+        <p class="form-status" id="contact-status"></p>
+      </form>
+    </div>
+  </section>
+
+  <style>
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-direct { display: flex; flex-direction: column; gap: 1.6rem; margin-top: 2rem; }
+    .contact-direct-link {
+      display: block;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: "Fraunces", serif;
+      font-size: 1.4rem;
+    }
+    .contact-direct-link .tag-label { display: block; margin-bottom: 0.3rem; font-family: "Manrope", sans-serif; }
+    .contact-direct-link:hover { color: var(--accent-ink); }
+    .contact-form { padding: 2.2rem; }
+    @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+  </style>
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const status = document.getElementById('contact-status');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!status) return;
+      status.textContent = 'Sending...';
+      status.className = 'form-status';
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Request failed');
+        status.textContent = "Thanks — I'll get back to you shortly.";
+        status.className = 'form-status ok';
+        form.reset();
+      } catch (err) {
+        status.textContent = 'Something went wrong — please call or text 817.312.1576 instead.';
+        status.className = 'form-status err';
+      }
+    });
+  </script>
+</Layout>

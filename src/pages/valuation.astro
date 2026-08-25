@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Free Home Valuation | Rachel Donahue, Fort Worth Realtor"
+  description="Get a free, no-pressure home valuation from Rachel Donahue, covering Fort Worth's 76109 and 76107 areas."
+>
+  <section class="valuation-hero">
+    <div class="wrap valuation-hero-grid">
+      <div>
+        <p class="eyebrow">Home Valuation</p>
+        <h1>What's your home actually worth right now?</h1>
+        <p class="lede">Online estimators guess at scale. I'll look at your actual street, your actual comps, and give you a real number &mdash; no pressure, no obligation to list.</p>
+        <ul class="valuation-points">
+          <li>A grounded estimate based on recent, comparable sales near you</li>
+          <li>Context on what's actually moving in your specific area right now</li>
+          <li>No obligation &mdash; useful whether you're selling next month or just curious</li>
+        </ul>
+      </div>
+      <form class="site-form card valuation-form" id="valuation-form">
+        <div>
+          <label for="address">Property Address</label>
+          <input type="text" id="address" name="address" required placeholder="123 Main St, Fort Worth, TX" />
+        </div>
+        <div>
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" />
+        </div>
+        <div>
+          <label for="timeline">Timeline</label>
+          <select id="timeline" name="timeline">
+            <option value="Just curious">Just curious</option>
+            <option value="Within 3 months">Within 3 months</option>
+            <option value="3-6 months">3-6 months</option>
+            <option value="6-12 months">6-12 months</option>
+            <option value="Not sure yet">Not sure yet</option>
+          </select>
+        </div>
+        <input type="hidden" name="formType" value="valuation" />
+        <button type="submit" class="btn btn-gold">Get My Free Valuation</button>
+        <p class="form-status" id="valuation-status"></p>
+      </form>
+    </div>
+  </section>
+
+  <style>
+    .valuation-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .valuation-points { padding-left: 1.2rem; color: var(--ink-soft); margin-top: 1.6rem; }
+    .valuation-points li { margin-bottom: 0.7rem; }
+    .valuation-form { padding: 2.2rem; }
+    @media (max-width: 860px) { .valuation-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+  </style>
+
+  <script>
+    const form = document.getElementById('valuation-form') as HTMLFormElement | null;
+    const status = document.getElementById('valuation-status');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!status) return;
+      status.textContent = 'Sending...';
+      status.className = 'form-status';
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Request failed');
+        status.textContent = "Thanks — I'll follow up with your valuation shortly.";
+        status.className = 'form-status ok';
+        form.reset();
+      } catch (err) {
+        status.textContent = 'Something went wrong — please call or text 817.312.1576 instead.';
+        status.className = 'form-status err';
+      }
+    });
+  </script>
+</Layout>

@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "racheldrealtor",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-08-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "racheldrealtor-leads",
+      "database_id": "ea0d5680-7af9-4dba-a8c3-06d8523788c5"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

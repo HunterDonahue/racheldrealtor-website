@@ -1,0 +1,60 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<Layout
+  title={`${post.data.title} | Rachel Donahue`}
+  description={post.data.description}
+>
+  <article>
+    <section class="post-hero">
+      {post.data.heroImage && <img src={post.data.heroImage} alt="" class="post-hero-img" />}
+      <div class="wrap post-hero-content">
+        <span class="tag-label">{post.data.tags[0] ?? 'Market Update'}</span>
+        <h1>{post.data.title}</h1>
+        <time class="post-hero-date">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+      </div>
+    </section>
+    <section class="post-body">
+      <div class="wrap post-body-inner">
+        <Content />
+        <div class="post-cta">
+          <p class="tag-label">Thinking about your own next move?</p>
+          <div class="hero-ctas">
+            <a href="/valuation/" class="btn btn-gold">Get Your Home's Value</a>
+            <a href="/contact/" class="btn btn-outline-dark">Get in Touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <style>
+    .post-hero { background: var(--white); padding-bottom: 0; }
+    .post-hero-img { width: 100%; aspect-ratio: 21/9; object-fit: cover; border-radius: 10px; margin-bottom: 2rem; }
+    .post-hero-content h1 { margin-top: 0.6rem; }
+    .post-hero-date { font-size: 0.85rem; color: var(--ink-soft); }
+    .post-body-inner { max-width: 720px; }
+    .post-body-inner :global(h2) { margin-top: 2.2rem; font-size: 1.5rem; }
+    .post-body-inner :global(p) { max-width: none; }
+    .post-body-inner :global(ul) { color: var(--ink-soft); padding-left: 1.3rem; }
+    .post-body-inner :global(li) { margin-bottom: 0.5rem; }
+    .post-body-inner :global(a) { color: var(--accent-ink); text-decoration: underline; }
+    .post-cta {
+      margin-top: 3rem;
+      padding-top: 2.2rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</Layout>

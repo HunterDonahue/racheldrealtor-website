@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="About Rachel Donahue | Fort Worth Realtor"
+  description="Rachel Donahue is a Fort Worth Realtor with Texas Property Brokers, focused on the 76109 and 76185 areas. Real Estate. Real Life."
+>
+  <section class="about-hero">
+    <div class="wrap about-hero-grid">
+      <img src="/images/rachel-headshot.jpg" alt="Rachel Donahue, Realtor" class="about-hero-img" />
+      <div>
+        <p class="eyebrow">About Rachel</p>
+        <h1>Real Estate. Real Life.</h1>
+        <p class="lede">I've been telling clients the same thing for years: this isn't just a transaction, it's your life. So I treat it that way &mdash; whether you're buying your first home, selling the one you raised your kids in, or figuring out what a renovation is actually going to take.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-body">
+    <div class="wrap about-body-grid">
+      <div>
+        <h2>How I work</h2>
+        <p>As a Realtor, my clients come with every kind of budget &mdash; from first-time buyers stretching every dollar to those looking in higher price ranges. It's my job to find you your dream home no matter the price point, and to work the deal so you get the best outcome possible. That doesn't change based on your budget. It's the same amount of effort, every time.</p>
+        <p>Finding the right home is about more than square footage and price range. From securing financing to touring houses to writing the offer, I'm with you every step of the process &mdash; and in a market that moves fast, being prepared matters as much as being patient.</p>
+
+        <h2>Renovations &amp; repairs</h2>
+        <p>A lot of Fort Worth's housing stock is older, and older homes need work. I encourage buyers to ask for repairs during the inspection period, but have the work done after closing by a contractor of your choosing &mdash; it almost always gets you a better result. After years of working with contractors across the area, I know who does reliable work, on time and on budget, and I'm glad to point you toward them.</p>
+
+        <h2>Marketing that actually works</h2>
+        <p>When I'm representing a seller, I use every channel that matters today &mdash; online listing platforms, social media, targeted networking, and open houses &mdash; to put your home in front of the right buyers, not just the most buyers. Reach and relevance both matter.</p>
+      </div>
+      <aside class="about-facts">
+        <div class="fact-card">
+          <span class="tag-label">Brokerage</span>
+          <p>Texas Property Brokers</p>
+        </div>
+        <div class="fact-card">
+          <span class="tag-label">License</span>
+          <p>#639524</p>
+        </div>
+        <div class="fact-card">
+          <span class="tag-label">Serving</span>
+          <p>Fort Worth &middot; 76109 &middot; 76107</p>
+        </div>
+        <div class="fact-card">
+          <span class="tag-label">Reach Rachel</span>
+          <p><a href="tel:8173121576">817.312.1576</a><br /><a href="mailto:rachdonahue@gmail.com">rachdonahue@gmail.com</a></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="about-cta">
+    <div class="wrap about-cta-inner">
+      <h2>Ready to talk through your next move?</h2>
+      <div class="hero-ctas">
+        <a href="/contact/" class="btn btn-gold">Get in Touch</a>
+        <a href="/valuation/" class="btn btn-outline-dark">Get Your Home's Value</a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .about-hero { background: var(--white); padding-bottom: 0; }
+    .about-hero-grid { display: grid; grid-template-columns: 280px 1fr; gap: 3rem; align-items: center; }
+    .about-hero-img { border-radius: 10px; aspect-ratio: 3/4; object-fit: cover; }
+    .about-body-grid { display: grid; grid-template-columns: 1fr 280px; gap: 4rem; }
+    .about-facts { display: flex; flex-direction: column; gap: 1.4rem; }
+    .fact-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.3rem;
+    }
+    .fact-card p { margin: 0.3rem 0 0; color: var(--ink); }
+    .fact-card a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--gold); }
+    .about-cta { background: var(--navy); color: var(--ivory); text-align: center; }
+    .about-cta h2 { color: var(--ivory); margin-bottom: 1.6rem; }
+    .about-cta-inner .hero-ctas { justify-content: center; }
+    @media (max-width: 820px) {
+      .about-hero-grid, .about-body-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-hero-img { max-width: 260px; }
+    }
+  </style>
+</Layout>

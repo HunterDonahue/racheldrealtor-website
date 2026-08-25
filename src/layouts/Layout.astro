@@ -1,0 +1,161 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const nav = [
+  { href: "/", label: "Home" },
+  { href: "/about/", label: "About" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/valuation/", label: "Home Valuation" },
+  { href: "/contact/", label: "Contact" },
+];
+const currentPath = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/png" href="/images/tpb-badge.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/" class="wordmark">
+        <span class="wordmark-name">Rachel Donahue</span>
+        <span class="wordmark-tag">Realtor &middot; Fort Worth</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        {nav.map(item => (
+          <a href={item.href} class:list={["nav-link", { active: currentPath === item.href }]}>{item.label}</a>
+        ))}
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-col">
+        <span class="wordmark-name footer-name">Rachel Donahue</span>
+        <p class="footer-tagline">Real Estate. Real Life.</p>
+        <p class="footer-contact">
+          <a href="tel:8173121576">817.312.1576</a><br />
+          <a href="mailto:rachdonahue@gmail.com">rachdonahue@gmail.com</a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <span class="tag-label footer-label">Serving</span>
+        <p class="footer-areas">Fort Worth &middot; 76109 &middot; 76107</p>
+        <span class="tag-label footer-label">Navigate</span>
+        <nav class="footer-nav" aria-label="Footer">
+          {nav.map(item => <a href={item.href}>{item.label}</a>)}
+        </nav>
+      </div>
+      <div class="footer-col footer-broker">
+        <img src="/images/tpb-wordmark-inverted.png" alt="Texas Property Brokers, est. 2005" class="broker-logo" />
+        <p class="broker-license">REALTOR&reg; &middot; License #639524</p>
+        <div class="broker-notices">
+          <a href="https://www.trec.texas.gov/forms/information-about-brokerage-services" target="_blank" rel="noopener">Texas Real Estate Commission Information About Brokerage Services</a>
+          <a href="https://www.trec.texas.gov/forms/consumer-protection-notice" target="_blank" rel="noopener">Texas Real Estate Commission Consumer Protection Notice</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <p>&copy; {new Date().getFullYear()} Rachel Donahue, Texas Property Brokers. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <style>
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(248, 246, 242, 0.92);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.75rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .wordmark {
+      text-decoration: none;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .wordmark-name {
+      display: block;
+      font-family: "Fraunces", serif;
+      font-size: 1.35rem;
+    }
+    .wordmark-tag {
+      display: block;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-ink);
+      margin-top: 0.15rem;
+    }
+    .site-nav { display: flex; gap: 1.6rem; flex-wrap: wrap; }
+    .nav-link {
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding-bottom: 0.2rem;
+      border-bottom: 2px solid transparent;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--ink); border-bottom-color: var(--gold); }
+
+    .site-footer { background: var(--navy); color: var(--ivory); margin-top: 5.5rem; }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1.4fr;
+      gap: 3rem;
+      padding: 4rem 1.75rem 3rem;
+    }
+    .footer-name { color: var(--ivory); }
+    .footer-tagline { font-family: "Fraunces", serif; font-style: italic; color: var(--taupe); margin: 0.3rem 0 1.2rem; }
+    .footer-contact { color: var(--ivory); font-size: 0.95rem; }
+    .footer-contact a { color: var(--ivory); text-decoration: none; }
+    .footer-contact a:hover { color: var(--gold); }
+    .footer-label { color: var(--taupe); display: block; margin-bottom: 0.6rem; }
+    .footer-areas { color: var(--ivory); margin-bottom: 1.4rem; }
+    .footer-nav { display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-nav a { color: var(--ivory); text-decoration: none; font-size: 0.9rem; opacity: 0.85; }
+    .footer-nav a:hover { opacity: 1; color: var(--gold); }
+    .footer-broker { display: flex; flex-direction: column; align-items: flex-start; }
+    .broker-logo { max-width: 220px; margin-bottom: 0.9rem; }
+    .broker-license { font-size: 0.85rem; color: var(--ivory); margin-bottom: 0.9rem; }
+    .broker-notices { display: flex; flex-direction: column; gap: 0.4rem; }
+    .broker-notices a { color: var(--taupe); font-size: 0.78rem; text-decoration: underline; line-height: 1.4; }
+    .broker-notices a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(248,246,242,0.15);
+      padding: 1.4rem 1.75rem;
+      font-size: 0.78rem;
+      color: rgba(248,246,242,0.6);
+    }
+    @media (max-width: 820px) {
+      .footer-inner { grid-template-columns: 1fr; gap: 2.2rem; }
+    }
+  </style>
+</body>
+</html>
