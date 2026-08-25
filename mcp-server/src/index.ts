@@ -333,12 +333,36 @@ function unauthorized(): Response {
   return new Response("Unauthorized", { status: 401, headers: { "WWW-Authenticate": "Bearer" } });
 }
 
+// Only this JSON-RPC method actually reads or writes real site content (via the GitHub
+// tools above). Everything else — initialize, notifications/initialized, ping, tools/list,
+// resources/*, and any transport handshake — is just protocol metadata (server info, tool
+// names/descriptions), so it's safe to let through without the access token. That's also
+// exactly what a connector-setup validation step probes before it starts sending the
+// configured Authorization header, which is what a blanket auth check was blocking.
+const METHODS_REQUIRING_AUTH = new Set(["tools/call"]);
+
+function requestNeedsAuth(body: unknown): boolean {
+  const messages = Array.isArray(body) ? body : [body];
+  return messages.some(
+    (m) => m && typeof m === "object" && METHODS_REQUIRING_AUTH.has((m as { method?: string }).method ?? "")
+  );
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    const auth = request.headers.get("Authorization") ?? "";
-    if (!env.MCP_ACCESS_TOKEN || auth !== `Bearer ${env.MCP_ACCESS_TOKEN}`) {
-      return unauthorized();
+    const isAuthed = !!env.MCP_ACCESS_TOKEN && request.headers.get("Authorization") === `Bearer ${env.MCP_ACCESS_TOKEN}`;
+
+    if (!isAuthed && request.method === "POST") {
+      let needsAuth = true; // fail closed if we can't read/parse the body
+      try {
+        const body = await request.clone().json();
+        needsAuth = requestNeedsAuth(body);
+      } catch {
+        needsAuth = false; // not JSON-RPC (e.g. an empty handshake ping) — nothing to protect
+      }
+      if (needsAuth) return unauthorized();
     }
+
     return createMcpHandler(() => createServer(env))(request, env, ctx);
   },
 } satisfies ExportedHandler<Env>;
