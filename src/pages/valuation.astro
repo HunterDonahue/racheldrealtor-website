@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout
   title="Free Home Valuation | Rachel Donahue, Fort Worth Realtor"
-  description="Get a free, no-pressure home valuation from Rachel Donahue, covering Fort Worth's 76109 and 76107 areas."
+  description="Get a free, no-pressure home valuation from Rachel Donahue, serving Tarrant and Parker County — including Fort Worth, Weatherford, Aledo, and Hudson Oaks."
 >
   <section class="valuation-hero">
     <div class="wrap valuation-hero-grid">
@@ -45,6 +45,10 @@ import Layout from '../layouts/Layout.astro';
           </select>
         </div>
         <input type="hidden" name="formType" value="valuation" />
+        <div class="hp-field" aria-hidden="true">
+          <label for="v-company">Company</label>
+          <input type="text" id="v-company" name="hp_company" tabindex="-1" autocomplete="off" />
+        </div>
         <button type="submit" class="btn btn-gold">Get My Free Valuation</button>
         <p class="form-status" id="valuation-status"></p>
       </form>
@@ -56,6 +60,7 @@ import Layout from '../layouts/Layout.astro';
     .valuation-points { padding-left: 1.2rem; color: var(--ink-soft); margin-top: 1.6rem; }
     .valuation-points li { margin-bottom: 0.7rem; }
     .valuation-form { padding: 2.2rem; }
+    .hp-field { position: absolute; left: -9999px; top: -9999px; }
     @media (max-width: 860px) { .valuation-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
   </style>
 

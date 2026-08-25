@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout
   title="Contact Rachel Donahue | Fort Worth Realtor"
-  description="Reach Rachel Donahue directly by phone, email, or the form below. Serving Fort Worth's 76109 and 76107 areas."
+  description="Reach Rachel Donahue directly by phone, email, or the form below. Serving Tarrant and Parker County — including Fort Worth, Weatherford, Aledo, and Hudson Oaks."
 >
   <section class="contact-hero">
     <div class="wrap contact-grid">
@@ -40,6 +40,10 @@ import Layout from '../layouts/Layout.astro';
           <textarea id="c-message" name="message" required placeholder="What can I help with?"></textarea>
         </div>
         <input type="hidden" name="formType" value="contact" />
+        <div class="hp-field" aria-hidden="true">
+          <label for="c-company">Company</label>
+          <input type="text" id="c-company" name="hp_company" tabindex="-1" autocomplete="off" />
+        </div>
         <button type="submit" class="btn btn-gold">Send Message</button>
         <p class="form-status" id="contact-status"></p>
       </form>
@@ -59,6 +63,7 @@ import Layout from '../layouts/Layout.astro';
     .contact-direct-link .tag-label { display: block; margin-bottom: 0.3rem; font-family: "Manrope", sans-serif; }
     .contact-direct-link:hover { color: var(--accent-ink); }
     .contact-form { padding: 2.2rem; }
+    .hp-field { position: absolute; left: -9999px; top: -9999px; }
     @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
   </style>
 

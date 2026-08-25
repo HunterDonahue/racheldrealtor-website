@@ -76,6 +76,12 @@ async function handleSubmit(request: Request, env: Env): Promise<Response> {
     return json({ error: 'Unknown form type.' }, 400);
   }
 
+  // Honeypot: a hidden field real visitors never see or fill. If it's populated,
+  // silently pretend success so bots don't learn to look elsewhere — nothing is saved or emailed.
+  if (String(payload.hp_company ?? '').trim() !== '') {
+    return json({ ok: true });
+  }
+
   const name = String(payload.name ?? '').trim();
   const email = String(payload.email ?? '').trim();
   if (!email || !email.includes('@')) {

@@ -2,8 +2,10 @@
 export interface Props {
   title: string;
   description: string;
+  image?: string;
+  type?: string;
 }
-const { title, description } = Astro.props;
+const { title, description, image, type = "website" } = Astro.props;
 const nav = [
   { href: "/", label: "Home" },
   { href: "/about/", label: "About" },
@@ -12,6 +14,36 @@ const nav = [
   { href: "/contact/", label: "Contact" },
 ];
 const currentPath = Astro.url.pathname;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image ?? "/images/house-4.jpg", Astro.site).toString();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
+  name: "Rachel Donahue",
+  telephone: "+18173121576",
+  email: "rachdonahue@gmail.com",
+  url: "https://racheldrealtor.com",
+  image: new URL("/images/rachel-headshot.jpg", Astro.site).toString(),
+  description: "Fort Worth Realtor serving Tarrant and Parker County, including Fort Worth, Weatherford, Aledo, and Hudson Oaks.",
+  areaServed: [
+    { "@type": "City", name: "Fort Worth" },
+    { "@type": "City", name: "Weatherford" },
+    { "@type": "City", name: "Aledo" },
+    { "@type": "City", name: "Hudson Oaks" },
+    { "@type": "AdministrativeArea", name: "Tarrant County" },
+    { "@type": "AdministrativeArea", name: "Parker County" },
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "TX",
+    addressCountry: "US",
+  },
+  worksFor: {
+    "@type": "Organization",
+    name: "Texas Property Brokers",
+  },
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -20,11 +52,29 @@ const currentPath = Astro.url.pathname;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
   <link rel="icon" type="image/png" href="/images/tpb-badge.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/global.css" />
+
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content="Rachel Donahue Real Estate" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
+  <!-- Cloudflare Web Analytics: paste the beacon script Cloudflare gives you
+       (dash.cloudflare.com -> Analytics & Logs -> Web Analytics -> Add site)
+       here once you have the token. -->
 </head>
 <body>
   <header class="site-header">
@@ -57,7 +107,7 @@ const currentPath = Astro.url.pathname;
       </div>
       <div class="footer-col">
         <span class="tag-label footer-label">Serving</span>
-        <p class="footer-areas">Fort Worth &middot; 76109 &middot; 76107</p>
+        <p class="footer-areas">Tarrant &amp; Parker County &middot; Fort Worth, Weatherford, Aledo &amp; Hudson Oaks</p>
         <span class="tag-label footer-label">Navigate</span>
         <nav class="footer-nav" aria-label="Footer">
           {nav.map(item => <a href={item.href}>{item.label}</a>)}
